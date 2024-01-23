@@ -27,7 +27,8 @@ def process_excel_to_json(input_files, output_file):
                 conversation = {
                     "system": system_value,
                     "input": part_keywords[random.randint(0,len(part_keywords)-1)].format(row[1]),
-                    "output": {"name":row[1],"question_type":"part","answer":row[0]}
+                    #"output": {"name":row[1],"question_type":"part","answer":row[0]}
+                    "output": json.dumps({"name":row[1],"question_type":"part","answer":row[0]},ensure_ascii=False)
                 }
 
                 # Append the conversation to the output data
@@ -38,7 +39,8 @@ def process_excel_to_json(input_files, output_file):
                     conversation = {
                         "system": system_value,
                         "input": alias_keywords[random.randint(0,len(alias_keywords)-1)].format(row[1]),
-                        "output": {"name":row[1],"question_type":"alias","answer":row[2]}
+                        #"output": {"name":row[1],"question_type":"alias","answer":row[2]}
+                        "output": json.dumps({"name":row[1],"question_type":"alias","answer":row[2]},ensure_ascii=False)
                     }
 
                     # Append the conversation to the output data
@@ -49,7 +51,8 @@ def process_excel_to_json(input_files, output_file):
                     conversation = {
                         "system": system_value,
                         "input": smell_keywords[random.randint(0,len(smell_keywords)-1)].format(row[1]),
-                        "output": {"name":row[1],"question_type":"smell","answer":row[3]}
+                        #"output": {"name":row[1],"question_type":"smell","answer":row[3]}
+                        "output": json.dumps({"name":row[1],"question_type":"smell","answer":row[3]},ensure_ascii=False)
                     }
 
                     # Append the conversation to the output data
@@ -60,7 +63,8 @@ def process_excel_to_json(input_files, output_file):
                     conversation = {
                         "system": system_value,
                         "input": cure_keywords[random.randint(0,len(cure_keywords)-1)].format(row[1]),
-                        "output": {"name":row[1],"question_type":"cure","answer":row[4]}
+                        #"output": {"name":row[1],"question_type":"cure","answer":row[4]}
+                        "output": json.dumps({"name":row[1],"question_type":"cure","answer":row[4]},ensure_ascii=False)
                     }
 
                     # Append the conversation to the output data

@@ -131,6 +131,13 @@ class zhongyao():
     def get_nate(self,text_url,text_part):
         count=0
         rows=[]
+        wb = Workbook()
+        ws = wb.active
+        ws['A1'] = 'part'
+        ws['B1'] = 'name'
+        ws['C1'] = 'alias'
+        ws['D1'] = 'smell'
+        ws['E1'] = 'cure'
         for link in text_url:#对所有帖子的站内链接进行遍历 拼接完整的帖子链接
             t_url="http://www.a-hospital.com"+link#拼接得到帖子的url
             #t_url = "http://www.a-hospital.com/w/%E6%9C%AC%E8%8D%89%E7%BA%B2%E7%9B%AE/%E7%8B%BC%E6%AF%92"
@@ -176,13 +183,7 @@ class zhongyao():
             # except Exception:
             #     return new_cure #对于某些没有主治的异常处理
 
-            wb = Workbook()
-            ws = wb.active
-            ws['A1'] = 'part'
-            ws['B1'] = 'name'
-            ws['C1'] = 'alias'
-            ws['D1'] = 'smell'
-            ws['E1'] = 'cure'
+            
             row=[text_part,text_name,text_alias,text_smell,text_cure]
 
             rows.append(row)

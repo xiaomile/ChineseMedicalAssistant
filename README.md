@@ -14,7 +14,7 @@ ChineseMedicalAssistant based on InternLM-chat-7b/InternLM2-chat-7b
 > 《本草纲目》是一部集本草学大成的著作。作者是明朝的李时珍，撰成于万历六年（1578 年），万历二十三年（1596年）在金陵(今南京)正式刊行。全书五十二卷，收载药物 1892 种，附药图 1100 余幅，阐发药物的性味、主治、用药法则、产地、形态、采集、炮制 、方剂配伍等，并载附方 10000 余。
 李时珍用了大约27年的时间才修改编写完成《本草纲目》，经过了三次改写，于万历六年（1578 年）才最终完成。在这个过程中，李时珍参考了800多种书籍，多次去各地进行实地考察，采集样本，耗费了他非常大的心血。
 
-&emsp;&emsp;中医药知识问答助手，实现以《甄嬛传》为切入点，打造一套基于小说、剧本的**个性化 AI** 微调大模型完整流程，通过提供任一小说、剧本，指定人物角色，运行本项目完整流程，让每一位用户都基于心仪的小说、剧本打造一个属于自己的、契合角色人设、具备高度智能的个性化 AI。
+&emsp;&emsp;中医药知识问答助手，实现以《本草纲目》为切入点，打造一套基于中医药知识百科的**个性化 AI** 微调大模型完整流程，同时也在探索AI时代下中医药知识的传承载体。
 
 > 具体如何实现全流程的 Character-AI 微调，可参考主仓库-[huanhuan-chat](https://github.com/xiaomile/ChineseMedicalAssistant.git)。
 > 
@@ -24,9 +24,10 @@ ChineseMedicalAssistant based on InternLM-chat-7b/InternLM2-chat-7b
 
 ## *News*
 
-***1月22日，Chat-嬛嬛应用在 OpenXLab，累计聊天次数已达 3.64k 次，感谢大家的支持~***
+***
+***
 
-***1月22日，Chat-嬛嬛模型 魔搭 累计下载 3107 次！***
+
 
 
 ## OpenXlab 模型
@@ -35,15 +36,13 @@ ChineseMedicalAssistant based on InternLM-chat-7b/InternLM2-chat-7b
 
 ## 数据集
 
-&emsp;&emsp;中医药知识问答助手 数据集采用《甄嬛传》剧本中所有关于甄嬛的台词和语句，共计 3000 余条，数据集样例：
+&emsp;&emsp;中医药知识问答助手 数据集采用中的本草纲目所记录的每项中药的数据，共计 7000 余条，数据集样例：
 
 ```text
 
 ```
 
-&emsp;&emsp;使用脚本将剧本中关于甄嬛的对话集抽取出来，作为数据集使用。
-
-&emsp;&emsp;也可以使用这个仓库的脚本
+&emsp;&emsp;使用脚本将剧本中关于药材的释名、气味和主治抓取下来，作为数据集使用。
 
 ## 微调
 
@@ -53,11 +52,11 @@ ChineseMedicalAssistant based on InternLM-chat-7b/InternLM2-chat-7b
 
 &emsp;&emsp;使用 XTuner 进行微调，具体脚本可参考[internlm2_chat_7b_qlora_oasst1_e3_copy.py](./train/internlm2_chat_7b_qlora_oasst1_e3_copy.py)，该脚本在`train`文件夹下。脚本内有较为详细的注释。
 
-## OpenXLab 部署 Chat-嬛嬛
+## OpenXLab 部署 中医药知识问答助手
 
-&emsp;&emsp;仅需要 Fork 本仓库，然后在 OpenXLab 上创建一个新的项目，将 Fork 的仓库与新建的项目关联，即可在 OpenXLab 上部署 Chat-嬛嬛。
+&emsp;&emsp;仅需要 Fork 本仓库，然后在 OpenXLab 上创建一个新的项目，将 Fork 的仓库与新建的项目关联，即可在 OpenXLab 上部署 中医药知识问答助手。
 
-&emsp;&emsp;***OPenXLab Chat嬛嬛  https://openxlab.org.cn/apps/detail/BYCJS/Chat_huanhuan***
+&emsp;&emsp;***OPenXLab 中医药知识问答助手  https://openxlab.org.cn/apps/detail/xiaomile/ChineseMedicalAssistant_internlm2***
 
 ![Alt text](images/openxlab.png)
 

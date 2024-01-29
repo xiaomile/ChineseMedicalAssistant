@@ -1,5 +1,4 @@
 # 中医药知识问答助手
-ChineseMedicalAssistant based on InternLM-chat-7b/InternLM2-chat-7b
 
 ***OpenXLab 体验地址：https://openxlab.org.cn/apps/detail/xiaomile/ChineseMedicalAssistant_internlm2***
 

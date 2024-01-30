@@ -66,27 +66,36 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 
 ![Alt text](images/openxlab.png)
 
-## LmDeploy部署
+## LmDeploy部署和量化
 
 - 首先安装LmDeploy
 
 ```shell
-pip install -U lmdeploy
+pip install -U 'lmdeploy[all]==v0.1.0'
 ```
 
-- 然后转换模型为`turbomind`格式
+- 然后转换模型为`turbomind`格式。使用 TurboMind 推理模型需要先将模型转化为 TurboMind 的格式，，目前支持在线转换和离线转换两种形式。TurboMind 是一款关于 LLM 推理的高效推理引擎，基于英伟达的 FasterTransformer 研发而成。它的主要功能包括：LLaMa 结构模型的支持，persistent batch 推理模式和可扩展的 KV 缓存管理器。
+本项目采用离线转换，需要在启动服务之前，将模型转为 lmdeploy TurboMind 的格式，如下所示。
 
 > --dst-path: 可以指定转换后的模型存储位置。
 
 ```shell
 lmdeploy convert internlm2-chat-7b  要转化的模型地址 --dst-path 转换后的模型地址
 ```
+执行完成后将会在当前目录生成一个 workspace 的文件夹。
 
-- LmDeploy Chat 对话
-
+- LmDeploy Chat对话。模型转换完成后，我们就具备了使用模型推理的条件，接下来就可以进行真正的模型推理环节。
+1、本地对话（Bash Local Chat）模式，它是跳过API Server直接调用TurboMind。简单来说，就是命令行代码直接执行 TurboMind。
 ```shell
-lmdeploy chat turbomind 转换后的turbomind模型地址
+lmdeploy chat turbomind 转换后的turbomind模型地址/workspace
 ```
+
+- 网页Demo演示。本项目采用将TurboMind推理作为后端，将Gradio作为前端Demo演示。
+```shell
+# Gradio+Turbomind(local)
+lmdeploy serve gradio 转换后的turbomind模型地址/workspace
+```
+就可以直接启动 Gradio，此时没有API Server，TurboMind直接与Gradio通信。
 
 ## OpneCompass 评测
 

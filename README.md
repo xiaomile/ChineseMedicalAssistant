@@ -66,7 +66,7 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 
 ![Alt text](images/openxlab.png)
 
-## LmDeploy部署和量化
+## LmDeploy部署
 
 - 首先安装LmDeploy
 

@@ -25,11 +25,15 @@
 
 ## *Fun*
 
-> 在某一次微调后的测试中，小助手突然输出了一个名为“白术散”的药方，起初这个并没有让我感到奇怪，直到我好奇在数据集里搜了一下“白术散”才发现压根没有这三个字，后来在网上搜了一下白术散的相关信息，功效居然对的上，这让我一度怀疑InternLM是不是有联网的功能。。。还是说这就是智能涌现！
-![](images/baizhusan.png)
-![](images/baizhusan2.png)
-![](images/baizhusan3.png)
-
+<details>
+<summary> 在某一次微调后的测试中，小助手突然输出了一个名为“白术散”的药方，起初这个并没有让我感到奇怪，直到我好奇在数据集里搜了一下“白术散”才发现压根没有这三个字，后来在网上搜了一下白术散的相关信息，功效居然对的上，这让我一度怀疑InternLM是不是有联网的功能。。。还是说这就是智能涌现！
+</summary>
+    <div align="center">
+        <img src='https://github.com/xiaomile/ChineseMedicalAssistant/blob/main/images/baizhusan.png' width='500px'>
+        <img src='https://github.com/xiaomile/ChineseMedicalAssistant/blob/main/images/baizhusan2.png' width='500px'>
+        <img src='https://github.com/xiaomile/ChineseMedicalAssistant/blob/main/images/baizhusan3.png' width='500px'>
+    </div>
+</details>
 
 
 ## OpenXlab 模型

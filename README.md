@@ -1,4 +1,5 @@
-![lishizhen](images/lishizhen.png)
+<div style='text-align:center'><img src='https://github.com/xiaomile/ChineseMedicalAssistant/blob/main/images/lishizhen.png' width='500px'></div>
+
 # 中医药知识问答助手
 
 ***OpenXLab 体验地址：https://openxlab.org.cn/apps/detail/xiaomile/medKnowledgeAssitant***

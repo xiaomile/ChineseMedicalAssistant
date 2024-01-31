@@ -1,4 +1,4 @@
-
+![lishizhen](images/lishizhen.png)
 # 中医药知识问答助手
 
 ***OpenXLab 体验地址：https://openxlab.org.cn/apps/detail/xiaomile/medKnowledgeAssitant***

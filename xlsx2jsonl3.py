@@ -3,7 +3,7 @@ import json
 import random
 
 
-alias_keywords=['{}有其他别名嘛','{}别名是什么','{}还有其他称呼','{}别称','{}别名','{}还可以怎么叫','{}其他名字','{}哪些别称','{}是什么']
+alias_keywords=['{}有其他别名嘛','{}别名是什么','{}还有其他称呼','{}别称','{}别名','{}还可以怎么叫','{}其他名字','{}哪些别称']
 smell_keywords=['{}什么气味','{}什么味道','{}闻起来怎么样','{}什么味的','{}吃起来苦嘛','{}吃了是什么味','{}有毒嘛','{}有毒性嘛']
 cure_keywords=['{}可以治什么','{}治哪些病','{}可以治什么症状','{}有什么好处', '{}有什么益处', '{}有何益处','{}用来做啥', '{}用来作甚','{}治愈啥', '{}主治啥', '{}主治什么', '{}有什么用', '{}有何用']
 part_keywords=['{}属于什么部类','{}属于什么部','{}什么部类', '{}什么部', '{}哪个部类', '{}哪个部']
@@ -12,8 +12,84 @@ repeat_times = 1
 
 def process_excel_to_json(input_files, symptom_files, output_file):
     # Initialize the output data structure
+    system_value = "您是一位非常专业的的中医药学教授。您始终根据提问者的问题提供准确、全面和详细的答案。"
     output_data = []
     for r_t in range(repeat_times):
+        hellodata = [
+            {
+                "conversation": [
+                    {
+                        "system": system_value,
+                        "input": "请做一下自我介绍",
+                        "output": "您好，我是中医药知识问答小助手，您可以向我提问一些中药的信息或者对某些症状的药方，我会尽我所知回答您"
+                    }
+                ]
+            },
+            {
+                "conversation": [
+                    {
+                        "system": system_value,
+                        "input": "请介绍一下你自己",
+                        "output": "您好，我是中医药知识问答小助手，您可以向我提问一些中药的信息或者对某些症状的药方，我会尽我所知回答您"
+                    }
+                ]
+            },
+            {
+                "conversation": [
+                    {
+                        "system": system_value,
+                        "input": "你好",
+                        "output": "您好，我是中医药知识问答小助手，您可以向我提问一些中药的信息或者对某些症状的药方，我会尽我所知回答您"
+                    }
+                ]
+            },
+            {
+                "conversation": [
+                    {
+                        "system": system_value,
+                        "input": "您好",
+                        "output": "您好，我是中医药知识问答小助手，您可以向我提问一些中药的信息或者对某些症状的药方，我会尽我所知回答您"
+                    }
+                ]
+            },
+            {
+                "conversation": [
+                    {
+                        "system": system_value,
+                        "input": "你好，请介绍一下自己",
+                        "output": "您好，我是中医药知识问答小助手，您可以向我提问一些中药的信息或者对某些症状的药方，我会尽我所知回答您"
+                    },
+                ]
+            },
+            {
+                "conversation": [
+                    {
+                        "system": system_value,
+                        "input": "你是谁",
+                        "output": "您好，我是中医药知识问答小助手，您可以向我提问一些中药的信息或者对某些症状的药方，我会尽我所知回答您"
+                    },
+                ]
+            },
+            {
+                "conversation": [
+                    {
+                        "system": system_value,
+                        "input": "你是",
+                        "output": "您好，我是中医药知识问答小助手，您可以向我提问一些中药的信息或者对某些症状的药方，我会尽我所知回答您"
+                    },
+                ]
+            },
+            {
+                "conversation": [
+                    {
+                        "system": system_value,
+                        "input": "你哪位",
+                        "output": "您好，我是中医药知识问答小助手，您可以向我提问一些中药的信息或者对某些症状的药方，我会尽我所知回答您"
+                    },
+                ]
+            }
+        ]
+        output_data += hellodata
         for input_file in input_files:
             # Load the workbook
             wb = openpyxl.load_workbook(input_file)
@@ -21,11 +97,8 @@ def process_excel_to_json(input_files, symptom_files, output_file):
             # Select the "DrugQA" sheet
             sheet = wb["Sheet"]
 
-            
-
             # Iterate through each row in column A and D
             for row in sheet.iter_rows(min_row=2, max_col=5, values_only=True):
-                system_value = "您是一位非常专业的的中医药学教授。您始终根据提问者的问题提供准确、全面和详细的答案。"
 
                 # Create the conversation dictionary
                 print(row[0],len(row))
@@ -50,7 +123,7 @@ def process_excel_to_json(input_files, symptom_files, output_file):
                                 "input": alias_keywords[i].format(row[0]),
                                 #"output": {"name":row[1],"question_type":"alias","answer":row[2]}
                                 #"output": json.dumps({"name":row[0],"question_type":"alias","answer":row[2]},ensure_ascii=False)
-                                "output": row[0]+"的名称解释是"+row[2]
+                                "output": row[0]+"的名称解释或者别名是"+row[2]
                             }
 
                             # Append the conversation to the output data
@@ -120,6 +193,12 @@ def process_excel_to_json(input_files, symptom_files, output_file):
                         output_data.append({"conversation": [conversation]})
 
     # Write the output data to a JSON file
+    # Shuffle the data randomly
+    random.shuffle(output_data)
+    random.shuffle(output_data)
+    random.shuffle(output_data)
+
+    
     with open(output_file, 'w', encoding='utf-8') as json_file:
         json.dump(output_data, json_file, indent=4,ensure_ascii=False)
 

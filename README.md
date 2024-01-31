@@ -1,8 +1,9 @@
+
 # 中医药知识问答助手
 
-***OpenXLab 体验地址：https://openxlab.org.cn/apps/detail/xiaomile/ChineseMedicalAssistant_internlm2***
+***OpenXLab 体验地址：https://openxlab.org.cn/apps/detail/xiaomile/medKnowledgeAssitant***
 
-***中医药知识问答助手 模型下载地址：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2***
+***中医药知识问答助手 模型下载地址：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm***
 
 > *此仓库主要用于将 中医药知识问答助手 项目部署到 OpenXLab 。*
 
@@ -31,7 +32,7 @@
 
 ## OpenXlab 模型
 
-&emsp;&emsp;中医药知识问答助手使用的是 InternLM2 的 7B 模型，模型参数量为 7B，模型已上传 [中医药知识问答助手(InternLM2-chat-7b)](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2) ,可以直接下载推理。
+&emsp;&emsp;中医药知识问答助手使用的是 InternLM2 的 7B 模型，模型参数量为 7B，模型已上传 [中医药知识问答助手(InternLM2-chat-7b)](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm) ,可以直接下载推理。
 
 ## 数据集
 
@@ -62,7 +63,7 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 
 &emsp;&emsp;仅需要 Fork 本仓库，然后在 OpenXLab 上创建一个新的项目，将 Fork 的仓库与新建的项目关联，即可在 OpenXLab 上部署 中医药知识问答助手。
 
-&emsp;&emsp;***OPenXLab 中医药知识问答助手  https://openxlab.org.cn/apps/detail/xiaomile/ChineseMedicalAssistant_internlm2***
+&emsp;&emsp;***OPenXLab 中医药知识问答助手  https://openxlab.org.cn/apps/detail/xiaomile/medKnowledgeAssitant***
 
 ![Alt text](images/openxlab.png)
 

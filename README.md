@@ -10,30 +10,29 @@
 
 ## 介绍
 
-&emsp;&emsp;中医药知识问答助手是利用医学百科中的本草纲目所记录的每项中药的数据，基于[InternLM2](https://github.com/InternLM/InternLM.git)进行LoRA微调得到的医学类的问答模型。
+&emsp;&emsp;中医药知识问答助手是利用医学百科中的本草纲目所记录的每项中药的数据，基于[InternLM](https://github.com/InternLM/InternLM.git)进行LoRA微调得到的医学类的问答模型。
 
 > 中医药知识是传承几千年的知识瑰宝，其中《本草纲目》是一部集大成的经典著作。作者是明朝的李时珍，撰成于万历六年（1578 年），万历二十三年（1596年）在金陵(今南京)正式刊行。全书五十二卷，收载药物 1892 种，附药图 1100 余幅，阐发药物的性味、主治、用药法则、产地、形态、采集、炮制 、方剂配伍等，并载附方 10000 余。
 李时珍用了大约27年的时间才修改编写完成《本草纲目》，经过了三次改写，于万历六年（1578 年）才最终完成。在这个过程中，李时珍参考了800多种书籍，多次去各地进行实地考察，采集样本，耗费了他非常大的心血。
 
 &emsp;&emsp;中医药知识问答助手，实现以《本草纲目》为切入点，打造一套基于中医药知识百科的**个性化 AI** 微调大模型完整流程，同时也在探索AI时代下中医药知识传承的载体形式。
 
-> 具体如何实现全流程的 Character-AI 微调，可参考主仓库-[ChineseMedicalAssistant](https://github.com/xiaomile/ChineseMedicalAssistant.git)。
+> 具体如何实现全流程的 chat-AI 微调，可参考本仓库-[ChineseMedicalAssistant](https://github.com/xiaomile/ChineseMedicalAssistant.git)。
 > 
 > 如何学习大模型部署和微调请参考：[开源大模型食用指南](https://github.com/datawhalechina/self-llm.git) 以及 [书生·浦语大模型实战营课程](https://github.com/InternLM/tutorial.git)
 
-&emsp;&emsp;***欢迎大家来给[InternLM2](https://github.com/InternLM/InternLM.git)，点点star哦~***
+&emsp;&emsp;***欢迎大家来给[InternLM](https://github.com/InternLM/InternLM.git)，点点star哦~***
 
-## *News*
+## *Fun*
 
-***
-***
+*** 在某一次微调后的测试中，***
 
 
 
 
 ## OpenXlab 模型
 
-&emsp;&emsp;中医药知识问答助手使用的是 InternLM2 的 7B 模型，模型参数量为 7B，模型已上传 [中医药知识问答助手(InternLM2-chat-7b)](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm) ,可以直接下载推理。
+&emsp;&emsp;中医药知识问答助手使用的是 InternLM2和InternLM 的 7B 模型，模型参数量为 7B，模型已上传 [中医药知识问答助手(InternLM-chat-7b)](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm) ,可以直接下载推理。
 
 ## 数据集
 
@@ -62,7 +61,7 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 
 ## OpenXLab 部署 中医药知识问答助手
 
-&emsp;&emsp;仅需要 Fork 本仓库，然后在 OpenXLab 上创建一个新的项目，将 Fork 的仓库与新建的项目关联，即可在 OpenXLab 上部署 中医药知识问答助手。
+&emsp;&emsp;仅需要 Fork [此仓库](https://github.com/xiaomile/medKnowledgeAssitant)，然后在 OpenXLab 上创建一个新的项目，将 Fork 的仓库与新建的项目关联，即可在 OpenXLab 上部署 中医药知识问答助手。
 
 &emsp;&emsp;***OPenXLab 中医药知识问答助手  https://openxlab.org.cn/apps/detail/xiaomile/medKnowledgeAssitant***
 

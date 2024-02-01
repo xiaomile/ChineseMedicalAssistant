@@ -35,4 +35,4 @@ def split_conversations(input_file, train_output_file, test_output_file):
     print(f"Split complete. Train data written to {train_output_file}, Test data written to {test_output_file}")
 
 # Replace 'input.jsonl', 'train.jsonl', and 'test.jsonl' with your actual file names
-split_conversations('./data/jsonl/output.jsonl', './train_test_data/train.jsonl', './train_test_data/test.jsonl')
+split_conversations('./data/jsonl3/output2.jsonl', './train_test_data/train.jsonl', './train_test_data/test.jsonl')

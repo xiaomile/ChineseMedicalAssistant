@@ -75,7 +75,7 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 
 <details><summary>数据收集和整理过程</summary>
 
-> 使用[脚本](getdatafromweb.py)将本草纲目中关于药材的释名、气味和主治按所属部分别抓取下来后，再整合成一个文件，作为数据使用。温馨提醒：千万别抓的太快，否则会被墙，别问我为什么知道。
+> 使用[脚本](getdatafromweb.py)将本草纲目中关于药材的释名、气味和主治按所属部分别抓取下来后，再整合成一个文件，作为数据使用。温馨提醒：千万别抓的太快，否则会被拉进小黑屋，别问我为什么知道。
 >
 > 从网上抓下来的数据,功效和药方是写在一起的，因此还需要经过将药方提炼出来，只保留主治的症状在功效描述里（由于功效描述大部分是格式固定的，因此可以使用re将其分离出来，分离可参考此[脚本](SplitEfficacyAndSymptomatology.py)）
 >
@@ -97,10 +97,72 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 
 &emsp;&emsp;使用 XTuner 进行微调，具体脚本可参考`configs`文件夹下的脚本，脚本内有较为详细的注释。
 
-|基座模型|脚本文件|
+|基座模型|配置文件|
 |:---:|:---:|
 |internlm-chat-7b|[internlm_chat_7b_qlora_e3_chineseMed.py](configs/internlm_chat_7b_qlora_e3_chineseMed.py)|
 |internlm2-chat-7b|[internlm2_chat_7b_qlora_e3_chineseMed.py](configs/internlm2_chat_7b_qlora_e3_chineseMed.py)|
+
+<details><summary>微调方法如下：</summary>
+
+1. 根据基座模型复制上面的配置文件，将模型地址`pretrained_model_name_or_path`和数据集地址`data_path`修改成自己的，propmt模板`prompt_template`需要根据基座模型是InternLM还是InternLM2选择`PROMPT_TEMPLATE.internlm_chat`还是`PROMPT_TEMPLATE.internlm2_chat`，其他参数根据自己的需求修改，然后就可以开始微调（微调时间长的推荐使用tmux，免得万一和机器断开连接导致微调中断）
+
+   ```bash
+   xtuner train ${YOUR_CONFIG} --deepspeed deepspeed_zero2
+   ```
+
+   `--deepspeed` 表示使用 [DeepSpeed](https://github.com/microsoft/DeepSpeed) 🚀 来优化训练过程。XTuner 内置了多种策略，包括 ZeRO-1、ZeRO-2、ZeRO-3 等。如果用户期望关闭此功能，请直接移除此参数。
+
+2. 将保存的 `.pth` 模型（如果使用的DeepSpeed，则将会是一个文件夹）转换为 HuggingFace Adapter 模型，即：生成 Adapter 文件夹：
+
+   ```bash
+   export MKL_SERVICE_FORCE_INTEL=1
+   xtuner convert pth_to_hf ${YOUR_CONFIG} ${PTH} ${LoRA_PATH}
+   ```
+
+3. 将 HuggingFace Adapter 模型合并入 HuggingFace 模型：
+
+    ```bash
+    xtuner convert merge ${Base_PATH} ${LoRA_PATH} ${MERGED_PATH}
+    ```
+
+4. 若真的出现意外导致微调中段，可以从最近的 checkpoint 继续微调
+
+   ```bash
+   xtuner train ${YOUR_CONFIG} --deepspeed deepspeed_zero2 --resume ${LATEST_CHECKPOINT}
+   ```
+
+</details>
+
+### Chat
+
+微调结束后可以使用xtuner查看对话效果
+
+```shell
+xtuner chat ${MERGED_PATH} [optional arguments]
+```
+
+<details><summary>参数：</summary>
+    
+- `--prompt-template`: 指定对话模板，一代模型使用 internlm_chat，二代使用  internlm2_chat。
+- `--system`:  指定SYSTEM文本
+- `--system-template`:  指定SYSTEM模板
+- `--bits`:  LLM位数，{4,8,None}。默认为 fp16。
+- `--bot-name`:  bot名称
+- `--with-plugins`:  指定要使用的插件
+- `--no-streamer`:  是否启用流式传输
+- `--lagent`:  是否使用lagent
+- `--command-stop-word`:  命令停止词
+- `--answer-stop-word`:  回答停止词
+- `--offload-folder`:  存放模型权重的文件夹（或者已经卸载模型权重的文件夹）
+- `--max-new-tokens`:  生成文本中允许的最大 token 数量
+- `--temperature`:  温度值，对于二代模型，建议为0.8。
+- `--top-k`:  保留用于顶k筛选的最高概率词汇标记数
+- `--top-p`:  如果设置为小于1的浮点数，仅保留概率相加高于 top_p 的最小一组最有可能的标记，对于二代模型，建议为0.8。
+- `--repetition-penalty`: 防止文本重复输出，对于二代模型，个人建议1.01，对于一代模型可不填。
+- `--seed`:  用于可重现文本生成的随机种子
+- `-h`:  查看参数。
+  
+</details>
 
 ## OpenXLab 部署 中医药知识问答助手
 
@@ -163,8 +225,8 @@ unzip OpenCompassData-core-20231110.zip
 ```shell
 python run.py \
     --datasets ceval_gen \
-    --hf-path /root/model/huanhuan/kmno4zx/huanhuan-chat-internlm2 \
-    --tokenizer-path /root/model/huanhuan/kmno4zx/huanhuan-chat-internlm2 \
+    --hf-path /root/ChineseMedicalAssistant/merged2 \
+    --tokenizer-path /root/ChineseMedicalAssistant/merged2 \
     --tokenizer-kwargs padding_side='left' truncation='left'     trust_remote_code=True \
     --model-kwargs device_map='auto' trust_remote_code=True \
     --max-seq-len 2048 \

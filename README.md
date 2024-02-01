@@ -4,13 +4,17 @@
 
 ***OpenXLab 体验地址：https://openxlab.org.cn/apps/detail/xiaomile/medKnowledgeAssitant***
 
-***中医药知识问答助手 模型下载地址：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm***
+***中医药知识问答助手***
+
+***下载地址（基座InternLM-chat-7b）：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm***
+
+***下载地址（基座InternLM2-chat-7b）：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2***
 
 > *此仓库主要用于微调大模型 ，要将中医药知识问答助手部署到openxlab请参考[这个仓库](https://github.com/xiaomile/ChineseMedicalAssistant2)*
 
 ## 介绍
 
-&emsp;&emsp;中医药知识问答助手是利用医学百科中的本草纲目所记录的每项中药的数据，基于[InternLM](https://github.com/InternLM/InternLM.git)进行LoRA微调得到的医学类的问答模型。
+&emsp;&emsp;中医药知识问答助手是利用医学百科中的本草纲目所记录的每项中药的数据，基于[InternLM和InternLM2](https://github.com/InternLM/InternLM.git)进行LoRA微调得到的医学类的问答模型。
 
 > 中医药知识是传承几千年的知识瑰宝，其中《本草纲目》是一部集大成的经典著作。作者是明朝的李时珍，撰成于万历六年（1578 年），万历二十三年（1596年）在金陵(今南京)正式刊行。全书五十二卷，收载药物 1892 种，附药图 1100 余幅，阐发药物的性味、主治、用药法则、产地、形态、采集、炮制 、方剂配伍等，并载附方 10000 余。
 李时珍用了大约27年的时间才修改编写完成《本草纲目》，经过了三次改写，于万历六年（1578 年）才最终完成。在这个过程中，李时珍参考了800多种书籍，多次去各地进行实地考察，采集样本，耗费了他非常大的心血。
@@ -39,12 +43,14 @@
 
 ## OpenXlab 模型
 
-&emsp;&emsp;中医药知识问答助手使用的是 InternLM2和InternLM 的 7B 模型，模型参数量为 7B，模型已上传,可以直接下载推理。
+&emsp;&emsp;中医药知识问答助手使用的是 InternLM2和InternLM 的 7B 模型，模型参数量为 7B，模型已上传，可以直接下载推理。
 
 | 基座模型| 微调数据量 | 训练次数 | 下载地址 |
 |:------:|:------:|:-------:|:---------|
 |InternLM-chat-7b|46933 conversations|5 epochs|[xiaomile/ChineseMedicalAssistant_internlm](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm)|
 |InternLM2-chat-7b|46933 conversations|5 epochs|[xiaomile/ChineseMedicalAssistant_internlm2](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2)|
+
+更
 
 ## 数据集
 

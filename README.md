@@ -6,7 +6,7 @@
 
 ***中医药知识问答助手 模型下载地址：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm***
 
-> *此仓库主要用于将 中医药知识问答助手 项目部署到 OpenXLab 。*
+> *此仓库主要用于微调大模型 ，要将中医药知识问答助手部署到openxlab请参考[这个仓库](https://github.com/xiaomile/ChineseMedicalAssistant2)*
 
 ## 介绍
 

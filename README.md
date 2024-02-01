@@ -102,14 +102,16 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 |internlm-chat-7b|[internlm_chat_7b_qlora_e3_chineseMed.py](configs/internlm_chat_7b_qlora_e3_chineseMed.py)|
 |internlm2-chat-7b|[internlm2_chat_7b_qlora_e3_chineseMed.py](configs/internlm2_chat_7b_qlora_e3_chineseMed.py)|
 
+### Train
+
 微调方法如下：
-1. 编写好微调配置文件后开始微调（微调时间长的推荐使用tmux，免得万一和机器断开连接导致微调中断）
+1. 根据基座模型复制上面的配置文件，将模型地址`pretrained_model_name_or_path`和数据集地址`data_path`修改成自己的，propmt模板`prompt_template`需要根据基座模型是InternLM还是InternLM2选择`PROMPT_TEMPLATE.internlm_chat`还是`PROMPT_TEMPLATE.internlm2_chat`，其他参数根据自己的需求修改，然后就可以开始微调（微调时间长的推荐使用tmux，免得万一和机器断开连接导致微调中断）
 
    ```bash
    xtuner train ${YOUR_CONFIG} --deepspeed deepspeed_zero2
    ```
 
-   - `--deepspeed` 表示使用 [DeepSpeed](https://github.com/microsoft/DeepSpeed) 🚀 来优化训练过程。XTuner 内置了多种策略，包括 ZeRO-1、ZeRO-2、ZeRO-3 等。如果用户期望关闭此功能，请直接移除此参数。
+   `--deepspeed` 表示使用 [DeepSpeed](https://github.com/microsoft/DeepSpeed) 🚀 来优化训练过程。XTuner 内置了多种策略，包括 ZeRO-1、ZeRO-2、ZeRO-3 等。如果用户期望关闭此功能，请直接移除此参数。
 
 2. 将保存的 `.pth` 模型（如果使用的DeepSpeed，则将会是一个文件夹）转换为 LoRA 模型：
 
@@ -121,7 +123,7 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 3. 将LoRA模型合并入 HuggingFace 模型：
 
     ```bash
-    xtuner convert merge ${Base_PATH} ${LoRA_PATH} ${SAVE_PATH}
+    xtuner convert merge ${Base_PATH} ${LoRA_PATH} ${MERGED_PATH}
     ```
 
 4. 若真的出现意外导致微调中段，可以从最近的checkpoint继续微调
@@ -129,6 +131,25 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
    ```bash
    xtuner train ${YOUR_CONFIG} --deepspeed deepspeed_zero2 --resume ${LATEST_CHECKPOINT}
    ```
+
+### Chat
+
+微调结束后可以使用xtuner查看对话效果
+
+```shell
+xtuner chat ${MERGED_PATH} [optional arguments]
+```
+
+参数：
+
+- `--prompt-template`: 一代模型使用 internlm_chat，二代使用  internlm2_chat。
+- `--system`: 指定对话的系统字段。
+- `--bits {4,8,None}`: 指定 LLM 的比特数。默认为 fp16。
+- `--no-streamer`: 是否移除 streamer。
+- `--top`: 对于二代模型，建议为0.8。
+- `--temperature`: 对于二代模型，建议为0.8。
+- `--repetition-penalty`: 对于二代模型，建议为1.002，对于一代模型可不填。
+- 更多信息，请执行 `xtuner chat -h` 查看。
 
 ## OpenXLab 部署 中医药知识问答助手
 

@@ -97,10 +97,38 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 
 &emsp;&emsp;使用 XTuner 进行微调，具体脚本可参考`configs`文件夹下的脚本，脚本内有较为详细的注释。
 
-|基座模型|脚本文件|
+|基座模型|配置文件|
 |:---:|:---:|
 |internlm-chat-7b|[internlm_chat_7b_qlora_e3_chineseMed.py](configs/internlm_chat_7b_qlora_e3_chineseMed.py)|
 |internlm2-chat-7b|[internlm2_chat_7b_qlora_e3_chineseMed.py](configs/internlm2_chat_7b_qlora_e3_chineseMed.py)|
+
+微调方法如下：
+1. 编写好微调配置文件后开始微调（微调时间长的推荐使用tmux，免得万一和机器断开连接导致微调中断）
+
+   ```bash
+   xtuner train ${YOUR_CONFIG} --deepspeed deepspeed_zero2
+   ```
+
+   - `--deepspeed` 表示使用 [DeepSpeed](https://github.com/microsoft/DeepSpeed) 🚀 来优化训练过程。XTuner 内置了多种策略，包括 ZeRO-1、ZeRO-2、ZeRO-3 等。如果用户期望关闭此功能，请直接移除此参数。
+
+2. 将保存的 `.pth` 模型（如果使用的DeepSpeed，则将会是一个文件夹）转换为 LoRA 模型：
+
+   ```bash
+   export MKL_SERVICE_FORCE_INTEL=1
+   xtuner convert pth_to_hf ${YOUR_CONFIG} ${PTH} ${LoRA_PATH}
+   ```
+
+3. 将LoRA模型合并入 HuggingFace 模型：
+
+    ```bash
+    xtuner convert merge ${Base_PATH} ${LoRA_PATH} ${SAVE_PATH}
+    ```
+
+4. 若真的出现意外导致微调中段，可以从最近的checkpoint继续微调
+
+   ```bash
+   xtuner train ${YOUR_CONFIG} --deepspeed deepspeed_zero2 --resume ${LATEST_CHECKPOINT}
+   ```
 
 ## OpenXLab 部署 中医药知识问答助手
 

@@ -27,7 +27,7 @@
 
 &emsp;&emsp;***欢迎大家来给[InternLM](https://github.com/InternLM/InternLM.git)，点点star哦~***
 
-## *Fun*
+## *Fun 轶事*
 
 <details>
 <summary> 偷偷联网 or 智能涌现</summary>
@@ -45,6 +45,16 @@
 > 后来在网上搜了一下白术散的相关信息，功效居然对的上。
 >
 > 这让我一度怀疑InternLM是不是有联网的功能。。。还是说这就是智能涌现！
+
+<details>
+    <summary> 彩蛋 </summary>
+    <div align="center">
+        <img src='https://github.com/xiaomile/ChineseMedicalAssistant/blob/main/images/qinxin.png' width='100%'>
+        <img src='https://github.com/xiaomile/ChineseMedicalAssistant/blob/main/images/qinxin2.png' width='100%'>
+    </div>
+</details>
+
+> 上面情况的可以说是瞎猫碰着死老鼠，那这个阁下又如何应对？
 
 
 ## OpenXlab 模型

@@ -102,9 +102,8 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 |internlm-chat-7b|[internlm_chat_7b_qlora_e3_chineseMed.py](configs/internlm_chat_7b_qlora_e3_chineseMed.py)|
 |internlm2-chat-7b|[internlm2_chat_7b_qlora_e3_chineseMed.py](configs/internlm2_chat_7b_qlora_e3_chineseMed.py)|
 
-### Train
+<details><summary>微调方法如下：</summary>
 
-微调方法如下：
 1. 根据基座模型复制上面的配置文件，将模型地址`pretrained_model_name_or_path`和数据集地址`data_path`修改成自己的，propmt模板`prompt_template`需要根据基座模型是InternLM还是InternLM2选择`PROMPT_TEMPLATE.internlm_chat`还是`PROMPT_TEMPLATE.internlm2_chat`，其他参数根据自己的需求修改，然后就可以开始微调（微调时间长的推荐使用tmux，免得万一和机器断开连接导致微调中断）
 
    ```bash
@@ -132,6 +131,8 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
    xtuner train ${YOUR_CONFIG} --deepspeed deepspeed_zero2 --resume ${LATEST_CHECKPOINT}
    ```
 
+</details>
+
 ### Chat
 
 微调结束后可以使用xtuner查看对话效果
@@ -140,7 +141,8 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 xtuner chat ${MERGED_PATH} [optional arguments]
 ```
 
-参数：
+<details><summary>参数：</summary>
+    
 - `--prompt-template`: 指定对话模板，一代模型使用 internlm_chat，二代使用  internlm2_chat。
 - `--system`:  指定SYSTEM文本
 - `--system-template`:  指定SYSTEM模板
@@ -159,7 +161,8 @@ xtuner chat ${MERGED_PATH} [optional arguments]
 - `--repetition-penalty`: 防止文本重复输出，对于二代模型，个人建议1.01，对于一代模型可不填。
 - `--seed`:  用于可重现文本生成的随机种子
 - `-h`:  查看参数。
-
+  
+</details>
 
 ## OpenXLab 部署 中医药知识问答助手
 

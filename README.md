@@ -74,17 +74,18 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 ```
 
 <details><summary>数据收集和整理过程</summary>
-&emsp;&emsp;使用[脚本](getdatafromweb.py)将本草纲目中关于药材的释名、气味和主治按所属部分别抓取下来后，再整合成一个文件，作为数据使用。温馨提醒：千万别抓的太快，否则会被墙，别问我为什么知道。
 
-&emsp;&emsp;从网上抓下来的数据,功效和药方是写在一起的，因此还需要经过将药方提炼出来，只保留主治的症状在功效描述里（由于功效描述大部分是格式固定的，因此可以使用re将其分离出来，分离可参考此[脚本](SplitEfficacyAndSymptomatology.py)）
-
-&emsp;&emsp;脚本分离后还需经过几天的人工修正，才能得到[最终的效果](symptom.xlsx)
-
-&emsp;&emsp;使用[脚本](xlsx2Andsympton2New.py)生成新的xlsx，准备创建数据集。
-
-&emsp;&emsp;使用[脚本](xlsx2jsonl3.py)生成微调用的jsonl格式数据集。
-
-&emsp;&emsp;最后使用[脚本](split2train and_test.py),分开训练集和测试集
+> 使用[脚本](getdatafromweb.py)将本草纲目中关于药材的释名、气味和主治按所属部分别抓取下来后，再整合成一个文件，作为数据使用。温馨提醒：千万别抓的太快，否则会被墙，别问我为什么知道。
+>
+> 从网上抓下来的数据,功效和药方是写在一起的，因此还需要经过将药方提炼出来，只保留主治的症状在功效描述里（由于功效描述大部分是格式固定的，因此可以使用re将其分离出来，分离可参考此[脚本](SplitEfficacyAndSymptomatology.py)）
+>
+> 脚本分离后还需经过几天的人工修正，才能得到[最终的效果](symptom.xlsx)
+>
+> 使用[脚本](xlsx2Andsympton2New.py)生成新的xlsx，准备创建数据集。
+>
+> 使用[脚本](xlsx2jsonl3.py)生成微调用的jsonl格式数据集，若需要重复随机数据，可将脚本中的repeat_times改成你想要重复的次数。
+>
+> 最后使用[脚本](split2train_and_test.py),分开训练集和测试集
 
 </details>
 

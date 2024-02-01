@@ -141,15 +141,25 @@ xtuner chat ${MERGED_PATH} [optional arguments]
 ```
 
 参数：
+- `--prompt-template`: 指定对话模板，一代模型使用 internlm_chat，二代使用  internlm2_chat。
+- `--system`:  指定SYSTEM文本
+- `--system-template`:  指定SYSTEM模板
+- `--bits`:  LLM位数，{4,8,None}。默认为 fp16。
+- `--bot-name`:  bot名称
+- `--with-plugins`:  指定要使用的插件
+- `--no-streamer`:  是否启用流式传输
+- `--lagent`:  是否使用lagent
+- `--command-stop-word`:  命令停止词
+- `--answer-stop-word`:  回答停止词
+- `--offload-folder`:  存放模型权重的文件夹（或者已经卸载模型权重的文件夹）
+- `--max-new-tokens`:  生成文本中允许的最大 token 数量
+- `--temperature`:  温度值，对于二代模型，建议为0.8。
+- `--top-k`:  保留用于顶k筛选的最高概率词汇标记数
+- `--top-p`:  如果设置为小于1的浮点数，仅保留概率相加高于 top_p 的最小一组最有可能的标记，对于二代模型，建议为0.8。
+- `--repetition-penalty`: 防止文本重复输出，对于二代模型，个人建议1.01，对于一代模型可不填。
+- `--seed`:  用于可重现文本生成的随机种子
+- `-h`:  查看参数。
 
-- `--prompt-template`: 一代模型使用 internlm_chat，二代使用  internlm2_chat。
-- `--system`: 指定对话的系统字段。
-- `--bits {4,8,None}`: 指定 LLM 的比特数。默认为 fp16。
-- `--no-streamer`: 是否移除 streamer。
-- `--top`: 对于二代模型，建议为0.8。
-- `--temperature`: 对于二代模型，建议为0.8。
-- `--repetition-penalty`: 对于二代模型，建议为1.002，对于一代模型可不填。
-- 更多信息，请执行 `xtuner chat -h` 查看。
 
 ## OpenXLab 部署 中医药知识问答助手
 

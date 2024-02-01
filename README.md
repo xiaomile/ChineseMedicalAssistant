@@ -39,7 +39,12 @@
 
 ## OpenXlab 模型
 
-&emsp;&emsp;中医药知识问答助手使用的是 InternLM2和InternLM 的 7B 模型，模型参数量为 7B，模型已上传 [中医药知识问答助手(InternLM-chat-7b)](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm) ,可以直接下载推理。
+&emsp;&emsp;中医药知识问答助手使用的是 InternLM2和InternLM 的 7B 模型，模型参数量为 7B，模型已上传,可以直接下载推理。
+
+| 基座模型| 微调数据量 | 训练次数 | 下载地址 |
+|:------:|:------:|:-------:|:---------|
+|InternLM-chat-7b|46933 conversations|5 epochs|[xiaomile/ChineseMedicalAssistant_internlm](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm)|
+|InternLM2-chat-7b|46933 conversations|5 epochs|[xiaomile/ChineseMedicalAssistant_internlm2](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2)|
 
 ## 数据集
 

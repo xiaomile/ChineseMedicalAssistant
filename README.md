@@ -213,7 +213,140 @@ lmdeploy serve gradio 转换后的turbomind模型地址/workspace
 ```
 就可以直接启动 Gradio，此时没有API Server，TurboMind直接与Gradio通信。
 
-## OpneCompass 评测
+## Lmdeploy&opencompass 量化以及量化评测  
+> 进行量化决策流程
+> Step1:尝试正常版本，评估效果。效果一般，启动量化。
+> Step2:开展KV Cache量化，以减少中间过程计算结果对显存的占用。评估量化效果。
+### `KV Cache`量化 
+- 计算与获得量化参数
+  >计算 minmax。主要思路是通过计算给定输入样本在每一层不同位置处计算结果的统计情况。
+  >在计算minmax的命令行中，会选择128条输入样本，每条样本长度为 2048，数据集选择ptb，输入模型后就会得到上面的各种统计值。
+```shell
+# 计算 minmax
+lmdeploy lite calibrate \
+  --model  模型路径 \
+  --calib_dataset "ptb" \
+  --calib_samples 128 \
+  --calib_seqlen 2048 \
+  --work_dir ./quant_output #参数保存路径
+```
+  >通过minmax获取量化参数。主要利用下面公式来获取每一层的KV中心值（zp）和缩放值（scale）。
+```shell
+zp = (min+max) / 2
+scale = (max-min) / 255
+quant: q = round( (f-zp) / scale)
+dequant: f = q * scale + zp
+```
+  >有了这两个值就可以进行量化和反量化操作。具体来说就是对历史存储中的K和V做量化，使用时再反量化。使用如下命令：
+```shell
+# 通过 minmax 获取量化参数
+lmdeploy lite kv_qparams \
+  --work_dir ./quant_output #参数保存路径 \
+  --turbomind_dir workspace/triton_models/weights/ #转换后模型路径 \
+  --kv_sym False \
+  --num_tp 1
+```
+- 修改配置。修改weights/config.ini文件，把quant_policy改为4，从而打开KV int8开关。
+```shell
+tensor_para_size = 1
+session_len = 2056
+max_batch_size = 64
+max_context_token_num = 1
+step_length = 1
+cache_max_entry_count = 0.5
+cache_block_seq_len = 128
+cache_chunk_size = 1
+use_context_fmha = 1
+quant_policy = 4
+max_position_embeddings = 2048
+rope_scaling_factor = 0.0
+use_logn_attn = 0
+```
+  >至此就完成了KV Cache量化。
+- 评估量化效果。编写评测文件`configs/eval_turbomind.py`
+```python
+from mmengine.config import read_base
+from opencompass.models.turbomind import TurboMindModel
+
+with read_base():
+ # choose a list of datasets   
+  from .datasets.ceval.ceval_gen import ceval_datasets 
+ # and output the results in a choosen format
+  from .summarizers.medium import summarizer
+
+datasets = [*ceval_datasets]
+
+internlm2_chat_7b = dict(
+     type=TurboMindModel,
+     abbr='internlm2-chat-7b-turbomind',
+     path='转换后的模型地址',
+     engine_config=dict(session_len=512,
+         max_batch_size=2,
+         rope_scaling_factor=1.0),
+     gen_config=dict(top_k=1,
+         top_p=0.8,
+         temperature=1.0,
+         max_new_tokens=100),
+     max_out_len=100,
+     max_seq_len=512,
+     batch_size=2,
+     concurrency=1,
+     #  meta_template=internlm_meta_template,
+     run_cfg=dict(num_gpus=1, num_procs=1),
+)
+models = [internlm2_chat_7b]
+```
+- 启动评测！
+```shell
+python run.py configs/eval_turbomind.py -w 指定结果保存路径
+```
+> Step3:开展W4A16量化，以减少模型参数计算结果对显存的占用。评估量化效果。W4A16中的A是指Activation，保持FP16，只对部分权重参数进行4bit量化
+### `W4A16`量化 
+- 计算与获得量化参数
+  >计算 minmax。主要思路是通过计算给定输入样本在每一层不同位置处计算结果的统计情况。
+  >在计算minmax的命令行中，会选择128条输入样本，每条样本长度为 2048，数据集选择ptb，输入模型后就会得到上面的各种统计值。
+```shell
+# 计算 minmax
+lmdeploy lite calibrate \
+  --model  模型路径 \
+  --calib_dataset "ptb" \
+  --calib_samples 128 \
+  --calib_seqlen 2048 \
+  --work_dir ./quant_output #参数保存路径
+```
+- 量化权重模型
+  >利用上面得到的统计值对参数进行量化。
+  >具体包括两步，分别是缩放参数和整体量化。
+  >执行如下命令：
+```shell
+# 量化权重模型
+lmdeploy lite auto_awq \
+  --model  #模型存放路径 \
+  --w_bits 4 \
+  --w_group_size 128 \
+  --work_dir ./quant_output #模型存放路径
+```
+  >命令中 w_bits表示量化的位数，w_group_size表示量化分组统计的尺寸，work_dir是量化后模型输出的位置。
+  >因为没有 torch.int4，所以实际存储时，8个4bit权重会被打包到一个int32值中。
+- 转换成 TurboMind 格式
+```shell
+# 转换模型的layout，存放在默认路径 ./workspace 下
+lmdeploy convert  internlm-chat-7b ./quant_output #KV Cache量化后的模型路径\
+    --model-format awq \
+    --group-size 128
+    --dst_path ./workspace_quant #转换后模型存放路径
+```
+  >这个group-size就是那个w_group_size。可以指定输出目录：--dst_path。
+  >至此就完成了KV Cache量化。
+
+- 评估量化效果。评测文件`configs/eval_turbomind.py`如上
+- 启动评测！
+```shell
+python run.py configs/eval_turbomind.py -w 结果保存路径
+```
+结果文件可在同目录文件[results](./results)中获取
+
+## OpenCompass 评测
 
 - 安装 OpenCompass
 
@@ -246,73 +379,6 @@ python run.py \
     --debug
 ```
   
-## Lmdeploy&opencompass 量化以及量化评测  
-### `W4`量化评测  
-
-- `W4`量化
-```shell
-lmdeploy lite auto_awq 要量化的模型地址 --work-dir 量化后的模型地址
-```
-- 转化为`TurbMind`
-```shell
-lmdeploy convert internlm2-chat-7b 量化后的模型地址  --model-format awq --group-size 128 --dst-path 转换后的模型地址
-```
-- 评测`config`编写  
-```python
-from mmengine.config import read_base
-from opencompass.models.turbomind import TurboMindModel
-
-with read_base():
- # choose a list of datasets   
- from .datasets.ceval.ceval_gen import ceval_datasets 
- # and output the results in a choosen format
-#  from .summarizers.medium import summarizer
-
-datasets = [*ceval_datasets]
-
-internlm2_chat_7b = dict(
-     type=TurboMindModel,
-     abbr='internlm2-chat-7b-turbomind',
-     path='转换后的模型地址',
-     engine_config=dict(session_len=512,
-         max_batch_size=2,
-         rope_scaling_factor=1.0),
-     gen_config=dict(top_k=1,
-         top_p=0.8,
-         temperature=1.0,
-         max_new_tokens=100),
-     max_out_len=100,
-     max_seq_len=512,
-     batch_size=2,
-     concurrency=1,
-     #  meta_template=internlm_meta_template,
-     run_cfg=dict(num_gpus=1, num_procs=1),
-)
-models = [internlm2_chat_7b]
-
-```
-- 评测启动！
-```shell
-python run.py configs/eval_turbomind.py -w 指定结果保存路径
-```
-### `KV Cache`量化评测 
-- 转换为`TurbMind`
-```shell
-lmdeploy convert internlm2-chat-7b  模型路径 --dst-path 转换后模型路径
-```
-- 计算与获得量化参数
-```shell
-# 计算
-lmdeploy lite calibrate 模型路径 --calib-dataset 'ptb' --calib-samples 128 --calib-seqlen 2048 --work-dir 参数保存路径
-# 获取量化参数
-lmdeploy lite kv_qparams 参数保存路径 转换后模型路径/triton_models/weights/ --num-tp 1
-```
-- 更改`quant_policy`改成`4`,更改上述`config`里面的路径
-- 评测启动！
-```shell
-python run.py configs/eval_turbomind.py -w 结果保存路径
-```
-结果文件可在同目录文件[results](./results)中获取
 
 ## 致谢
 

@@ -10,6 +10,8 @@
 
 ***下载地址（基座InternLM2-chat-7b）：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2***
 
+***下载地址（量化InternLM-chat-7b-4bit）：https://openxlab.org.cn/models/detail/LiyanJin/ChineseMedicalAssistant_Quant***
+
 > *此仓库主要用于微调大模型 ，要将中医药知识问答助手部署到openxlab请参考[这个仓库](https://github.com/xiaomile/ChineseMedicalAssistant2)*
 
 ## 介绍
@@ -188,7 +190,7 @@ xtuner chat ${MERGED_PATH} [optional arguments]
 - 首先安装LmDeploy
 
 ```shell
-pip install -U 'lmdeploy[all]==v0.1.0'
+pip install -U 'lmdeploy[all]==v0.2.0'
 ```
 
 - 然后转换模型为`turbomind`格式。使用 TurboMind 推理模型需要先将模型转化为 TurboMind 的格式，，目前支持在线转换和离线转换两种形式。TurboMind 是一款关于 LLM 推理的高效推理引擎，基于英伟达的 FasterTransformer 研发而成。它的主要功能包括：LLaMa 结构模型的支持，persistent batch 推理模式和可扩展的 KV 缓存管理器。
@@ -197,20 +199,20 @@ pip install -U 'lmdeploy[all]==v0.1.0'
 > --dst-path: 可以指定转换后的模型存储位置。
 
 ```shell
-lmdeploy convert internlm2-chat-7b  要转化的模型地址 --dst-path 转换后的模型地址
+lmdeploy convert internlm-chat-7b  要转化的模型地址 --dst-path ./workspace 转换后模型的存放地址
 ```
 执行完成后将会在当前目录生成一个 workspace 的文件夹。
 
 - LmDeploy Chat对话。模型转换完成后，我们就具备了使用模型推理的条件，接下来就可以进行真正的模型推理环节。
 1、本地对话（Bash Local Chat）模式，它是跳过API Server直接调用TurboMind。简单来说，就是命令行代码直接执行 TurboMind。
 ```shell
-lmdeploy chat turbomind 转换后的turbomind模型地址/workspace
+lmdeploy chat turbomind ./workspace #转换后的turbomind模型地址
 ```
 
 - 网页Demo演示。本项目采用将TurboMind推理作为后端，将Gradio作为前端Demo演示。
 ```shell
 # Gradio+Turbomind(local)
-lmdeploy serve gradio 转换后的turbomind模型地址/workspace
+lmdeploy serve gradio ./workspace #转换后的turbomind模型地址
 ```
 就可以直接启动 Gradio，此时没有API Server，TurboMind直接与Gradio通信。
 
@@ -225,11 +227,12 @@ lmdeploy serve gradio 转换后的turbomind模型地址/workspace
 ```shell
 # 计算 minmax
 lmdeploy lite calibrate \
-  --model  模型路径 \
-  --calib_dataset "ptb" \
-  --calib_samples 128 \
-  --calib_seqlen 2048 \
-  --work_dir ./quant_output #参数保存路径
+  ./internlm-chat-7b/  #模型绝对路径 \
+  --calib-dataset 'ptb' \
+  --calib-samples 128 \
+  --calib-seqlen 2048 \
+  --work-dir ./quant_output #参数保存路径
+  --trust_remote_code=True
 ```
   >通过minmax获取量化参数。主要利用下面公式来获取每一层的KV中心值（zp）和缩放值（scale）。
 ```shell
@@ -242,9 +245,8 @@ dequant: f = q * scale + zp
 ```shell
 # 通过 minmax 获取量化参数
 lmdeploy lite kv_qparams \
-  --work_dir ./quant_output #参数保存路径 \
-  --turbomind_dir workspace/triton_models/weights/ #转换后模型路径 \
-  --kv_sym False \
+   ./quant_output #保存kv计算结果的路径 \
+   workspace/triton_models/weights/ #转换后模型的存放路径 \
   --num_tp 1
 ```
 - 修改配置。修改weights/config.ini文件，把quant_policy改为4，从而打开KV int8开关。
@@ -264,6 +266,11 @@ rope_scaling_factor = 0.0
 use_logn_attn = 0
 ```
   >至此就完成了KV Cache量化。
+  >开始对话
+```shell
+lmdeploy chat turbomind /root/chinesemedical/workspace --model-format hf  --quant-policy 4
+```
+
 - 评估量化效果。编写评测文件`configs/eval_turbomind.py`
 ```python
 from mmengine.config import read_base
@@ -309,37 +316,43 @@ python run.py configs/eval_turbomind.py -w 指定结果保存路径
 ```shell
 # 计算 minmax
 lmdeploy lite calibrate \
-  --model  模型路径 \
-  --calib_dataset "ptb" \
-  --calib_samples 128 \
-  --calib_seqlen 2048 \
-  --work_dir ./quant_output #参数保存路径
+  ./internlm-chat-7b/  #模型绝对路径 \
+  --calib-dataset 'ptb' \
+  --calib-samples 128 \
+  --calib-seqlen 2048 \
+  --work-dir ./quant_output #参数保存路径
+  --trust_remote_code=True
 ```
 - 量化权重模型
   >利用上面得到的统计值对参数进行量化。
-  >具体包括两步，分别是缩放参数和整体量化。
   >执行如下命令：
 ```shell
 # 量化权重模型
 lmdeploy lite auto_awq \
-  --model  #模型存放路径 \
-  --w_bits 4 \
+  ./internlm-chat-7b/   #未量化前模型的存放路径 \
+  --calib-dataset 'ptb' \
+  --calib-samples 128 \ 
+  --calib-seqlen 2048 \
+  --w-bits 4 \
   --w_group_size 128 \
-  --work_dir ./quant_output #模型存放路径
+  --work_dir ./internlm-chat-7b-4bit #量化后模型的存放路径
 ```
   >命令中 w_bits表示量化的位数，w_group_size表示量化分组统计的尺寸，work_dir是量化后模型输出的位置。
   >因为没有 torch.int4，所以实际存储时，8个4bit权重会被打包到一个int32值中。
-- 转换成 TurboMind 格式
+- 转换成 TurboMind 格式（也可以跳过这一步，直接启动对话）
 ```shell
 # 转换模型的layout，存放在默认路径 ./workspace 下
-lmdeploy convert  internlm-chat-7b ./quant_output #KV Cache量化后的模型路径\
+lmdeploy convert  internlm-chat-7b ./internlm-chat-7b-4bit/ #W4A16量化后的模型路径\
     --model-format awq \
     --group-size 128
-    --dst_path ./workspace_quant #转换后模型存放路径
-```
+    --dst_path ./workspace_4bit #转换后模型的存放路径
+``` 
   >这个group-size就是那个w_group_size。可以指定输出目录：--dst_path。
-  >至此就完成了KV Cache量化。
-
+  >至此就完成了W4A16量化。
+- 启动对话
+```shell
+lmdeploy chat turbomind ./workspace_4bit --model-format awq
+``` 
 - 评估量化效果。评测文件`configs/eval_turbomind.py`如上
 - 启动评测！
 ```shell

@@ -7,10 +7,13 @@
 ***中医药知识问答助手***
 
 ***下载地址（基座InternLM-chat-7b）：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm***
+[![Open in OpenXLab](https://cdn-static.openxlab.org.cn/header/openxlab_models.svg)](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm)
 
 ***下载地址（基座InternLM2-chat-7b）：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2***
+[![Open in OpenXLab](https://cdn-static.openxlab.org.cn/header/openxlab_models.svg)](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2)
 
 ***下载地址（量化InternLM-chat-7b-4bit）：https://openxlab.org.cn/models/detail/LiyanJin/ChineseMedicalAssistant_Quant***
+[![Open in OpenXLab](https://cdn-static.openxlab.org.cn/header/openxlab_models.svg)](https://openxlab.org.cn/models/detail/LiyanJin/ChineseMedicalAssistant_Quant)
 
 > *此仓库主要用于微调大模型 ，要将中医药知识问答助手部署到openxlab请参考[这个仓库](https://github.com/xiaomile/ChineseMedicalAssistant2)*
 

@@ -184,6 +184,7 @@ xtuner chat ${MERGED_PATH} [optional arguments]
 &emsp;&emsp;仅需要 Fork [此仓库](https://github.com/xiaomile/medKnowledgeAssitant)，然后在 OpenXLab 上创建一个新的项目，将 Fork 的仓库与新建的项目关联，即可在 OpenXLab 上部署 中医药知识问答助手。
 
 &emsp;&emsp;***OPenXLab 中医药知识问答助手  https://openxlab.org.cn/apps/detail/xiaomile/medKnowledgeAssitant***
+&emsp;&emsp;***OPenXLab 中医药知识问答助手（4bit）  https://openxlab.org.cn/apps/detail/xiaomile/personal_assistant2_4bit***
 
 ![Alt text](images/openxlab.png)
 

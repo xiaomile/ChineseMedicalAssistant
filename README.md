@@ -66,6 +66,8 @@
 |InternLM-chat-7b|46933 conversations|5 epochs|[xiaomile/ChineseMedicalAssistant_internlm](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm)|
 |InternLM2-chat-7b|46933 conversations|5 epochs|[xiaomile/ChineseMedicalAssistant_internlm2](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2)|
 |InternLM-chat-7b|469330 conversations|4 epochs|[xiaomile/ChineseMedicalAssistant_internlm_40w_e4](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm_40w_e4)|
+|InternLM-chat-7b|46933 conversations|3 epochs|[zongkang/ChineseMedicalAssistant](https://openxlab.org.cn/models/detail/zongkang/ChineseMedicalAssistant)|
+|InternLM-chat-7b|469330 conversations|6 epochs|[zongkang/ChineseMedicalAssistant_chat_7b](https://openxlab.org.cn/models/detail/zongkang/ChineseMedicalAssistant_chat_7b)|
 
 ***更大训练量的模型 coming soon...***
 

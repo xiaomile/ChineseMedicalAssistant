@@ -215,6 +215,7 @@ lmdeploy chat turbomind ./workspace #转换后的turbomind模型地址
 lmdeploy serve gradio ./workspace #转换后的turbomind模型地址
 ```
 就可以直接启动 Gradio，此时没有API Server，TurboMind直接与Gradio通信。
+- 原始模型运行，显存占用56%
 
 ## Lmdeploy&opencompass 量化以及量化评测  
 > 进行量化决策流程
@@ -308,6 +309,8 @@ models = [internlm2_chat_7b]
 ```shell
 python run.py configs/eval_turbomind.py -w 指定结果保存路径
 ```
+- 单独做KV Cache量化，显存占用55%，无明显优化！
+  
 > Step3:开展W4A16量化，以减少模型参数计算结果对显存的占用。评估量化效果。W4A16中的A是指Activation，保持FP16，只对部分权重参数进行4bit量化
 ### `W4A16`量化 
 - 计算与获得量化参数
@@ -359,6 +362,29 @@ lmdeploy chat turbomind ./workspace_4bit --model-format awq
 python run.py configs/eval_turbomind.py -w 结果保存路径
 ```
 结果文件可在同目录文件[results](./results)中获取
+- 单独做W4A16量化，显存占用64%，较未量化前模型占用内存更大！
+
+
+> Step4:同步开启KV Cache量化和W4A16量化，以减少中间过程计算结果和模型参数计算结果对显存的占用。
+- 获取对W4A16量化后模型的KV Cache量化参数
+```shell
+lmdeploy lite kv_qparams \
+   ./quant_output/  \  # 存放之前kv cache计算结果的文件夹路径
+  workspace_4bit/triton_models/weights/ \ # 存放本次kv cache量化后参数的文件夹路径
+  --num-tp 1
+```
+- 修改参数
+对workspace_4bit/triton_models/weights/config.ini文件进行参数修改
+```shell
+cache_max_entry_count = 0.2
+quant_policy = 4
+```
+- 启动对话
+```shell
+lmdeploy chat turbomind ./workspace_4bit/  --model-format awq --quant-policy 4
+```
+- 同步开启KV Cache量化和W4A16量化，显存占用34%，有明显优化效果！
+
 
 ## OpenCompass 评测
 

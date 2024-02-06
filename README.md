@@ -73,8 +73,7 @@
 |InternLM-chat-7b|469330 conversations|4 epochs|[xiaomile/ChineseMedicalAssistant_internlm_40w_e4](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm_40w_e4)|
 |InternLM-chat-7b|46933 conversations|3 epochs|[zongkang/ChineseMedicalAssistant](https://openxlab.org.cn/models/detail/zongkang/ChineseMedicalAssistant)|
 |InternLM-chat-7b|469330 conversations|6 epochs|[zongkang/ChineseMedicalAssistant_chat_7b](https://openxlab.org.cn/models/detail/zongkang/ChineseMedicalAssistant_chat_7b)|
-
-***更大训练量的模型 coming soon...***
+|InternLM-chat-7b|46933 conversations|5 epochs|[LiyanJin/ChineseMedicalAssistant_Quant](https://openxlab.org.cn/models/detail/LiyanJin/ChineseMedicalAssistant_Quant)|
 
 ## 数据集
 
@@ -101,9 +100,7 @@ output:韭的功效是主治：赤白带下;喘息欲绝;疮癣;刀伤出血;盗
 >
 > 使用[脚本](xlsx2Andsympton2New.py)生成新的xlsx，准备创建数据集。
 >
-> 使用[脚本](xlsx2jsonl3.py)生成微调用的jsonl格式数据集，若需要重复随机数据，可将脚本中的repeat_times改成你想要重复的次数。
->
-> 最后使用[脚本](split2train_and_test.py),分开训练集和测试集
+> 使用[脚本](xlsx2jsonl3.py)生成微调用的和测评用的jsonl格式数据集`train.jsonl`和`test.jsonl`，若需要重复随机数据，可将脚本中的repeat_times改成你想要重复的次数。
 
 </details>
 

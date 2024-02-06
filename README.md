@@ -402,27 +402,45 @@ cd opencompass
 pip install -e .
 ```
 
-- 下载解压数据集
+- 在opencompass/configs目录下新建自定义数据集测评配置文件eval_internlm_7b_custom.py
 
-```shell
-cp /share/temp/datasets/OpenCompassData-core-20231110.zip /root/opencompass/
-unzip OpenCompassData-core-20231110.zip
+```python
+from mmengine.config import read_base
+from opencompass.models import HuggingFaceCausalLM
+
+with read_base():
+    from .summarizers.medium import summarizer
+
+datasets = [
+    {"path": "/root/ChineseMedicalAssistant/test_qa.jsonl", "data_type": "qa", "infer_method": "gen"}, # your custom dataset
+]
+
+internlm_chat_7b = dict(
+       type=HuggingFaceCausalLM,
+       # `HuggingFaceCausalLM` 的初始化参数
+       path='/root/ChineseMedicalAssistant/merged', # your model path
+       tokenizer_path='/root/ChineseMedicalAssistant/merged', # your model path
+       tokenizer_kwargs=dict(
+           padding_side='left',
+           truncation_side='left',
+           proxies=None,
+           trust_remote_code=True),
+       model_kwargs=dict(device_map='auto',trust_remote_code=True),
+       # 下面是所有模型的共同参数，不特定于 HuggingFaceCausalLM
+       abbr='internlm_chat_7b',               # 结果显示的模型缩写
+       max_seq_len=2048,             # 整个序列的最大长度
+       max_out_len=100,              # 生成的最大 token 数
+       batch_size=64,                # 批量大小
+       run_cfg=dict(num_gpus=1),     # 该模型所需的 GPU 数量
+    )
+
+models=[internlm_chat_7b]
 ```
 
 - 评测启动！
 
 ```shell
-python run.py \
-    --datasets ceval_gen \
-    --hf-path /root/ChineseMedicalAssistant/merged2 \
-    --tokenizer-path /root/ChineseMedicalAssistant/merged2 \
-    --tokenizer-kwargs padding_side='left' truncation='left'     trust_remote_code=True \
-    --model-kwargs device_map='auto' trust_remote_code=True \
-    --max-seq-len 2048 \
-    --max-out-len 16 \
-    --batch-size 2  \
-    --num-gpus 1 \
-    --debug
+python run.py configs/eval_internlm_7b_custom.py
 ```
   
 

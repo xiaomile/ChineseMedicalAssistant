@@ -1,4 +1,4 @@
-<div align="center"><img src='https://github.com/xiaomile/ChineseMedicalAssistant/blob/main/images/lishizhen.png' width='500px'></div>
+﻿<div align="center"><img src='https://github.com/xiaomile/ChineseMedicalAssistant/blob/main/images/lishizhen.png' width='500px'></div>
 
 # 中医药知识问答助手
 
@@ -187,6 +187,7 @@ xtuner chat ${MERGED_PATH} [optional arguments]
 &emsp;&emsp;***OPenXLab 中医药知识问答助手（4bit）  https://openxlab.org.cn/apps/detail/xiaomile/personal_assistant2_4bit***
 
 ![Alt text](images/openxlab.png)
+![4bit](images/openxlab2.png)
 
 ## LmDeploy部署
 

@@ -24,7 +24,7 @@ from xtuner.utils import PROMPT_TEMPLATE
 pretrained_model_name_or_path = '/root/share/model_repos/internlm-chat-7b'
 
 # Data
-data_path = '/root/ChineseMedicalAssistant/train_test_data/output2.jsonl'
+data_path = '../data/jsonl3/train.jsonl'
 prompt_template = PROMPT_TEMPLATE.internlm_chat
 max_length = 2048
 pack_to_max_length = True

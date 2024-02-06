@@ -402,7 +402,7 @@ cd opencompass
 pip install -e .
 ```
 
-- 在opencompass/configs目录下新建自定义数据集测评配置文件eval_internlm_7b_custom.py
+- 在opencompass/configs目录下新建自定义数据集测评配置文件 `eval_internlm_7b_custom.py` 和 `eval_internlm_chat_turbomind_api_custom.py`
 
 ```python
 from mmengine.config import read_base
@@ -437,12 +437,56 @@ internlm_chat_7b = dict(
 models=[internlm_chat_7b]
 ```
 
+```python
+from mmengine.config import read_base
+from opencompass.models.turbomind_api import TurboMindAPIModel
+
+with read_base():
+    from .summarizers.medium import summarizer
+
+datasets = [
+    {"path": "/root/ChineseMedicalAssistant/test_qa.jsonl", "data_type": "qa", "infer_method": "gen"}, # your custom dataset
+]
+
+
+meta_template = dict(
+    round=[
+        dict(role='HUMAN', begin='<|User|>:', end='\n'),
+        dict(role='BOT', begin='<|Bot|>:', end='<eoa>\n', generate=True),
+    ],
+    eos_token_id=103028)
+
+models = [
+    dict(
+        type=TurboMindAPIModel,
+        abbr='internlm-chat-7b-turbomind',
+        path="./model/workspace_4bit",
+        api_addr='http://0.0.0.0:23333',
+        max_out_len=100,
+        max_seq_len=2048,
+        batch_size=8,
+        meta_template=meta_template,
+        run_cfg=dict(num_gpus=1, num_procs=1),
+    )
+]
+```
+
 - 评测启动！
 
 ```shell
 python run.py configs/eval_internlm_7b_custom.py
 ```
-  
+
+- 量化评测，先启动turbomind作为服务端
+
+```shell
+lmdeploy serve api_server ./workspace_4bit --server_name 0.0.0.0 --server_port 23333 --instance_num 64 --tp 1
+```
+
+```shell
+python run.py eval_internlm_chat_turbomind_api_custom.py
+```
+
 
 ## 致谢
 

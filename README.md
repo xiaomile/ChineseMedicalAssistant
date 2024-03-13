@@ -9,6 +9,9 @@
 ***下载地址（基座InternLM-chat-7b）：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm***
 [![Open in OpenXLab](https://cdn-static.openxlab.org.cn/header/openxlab_models.svg)](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm)
 
+***下载地址（基座InternLM2-chat-1.8b）：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2_1_8b***
+[![Open in OpenXLab](https://cdn-static.openxlab.org.cn/header/openxlab_models.svg)](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2_1_8b)
+
 ***下载地址（基座InternLM2-chat-7b）：https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2***
 [![Open in OpenXLab](https://cdn-static.openxlab.org.cn/header/openxlab_models.svg)](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2)
 
@@ -31,6 +34,9 @@
 > 如何学习大模型部署和微调请参考：[开源大模型食用指南](https://github.com/datawhalechina/self-llm.git) 以及 [书生·浦语大模型实战营课程](https://github.com/InternLM/tutorial.git)
 
 &emsp;&emsp;***欢迎大家来给[InternLM](https://github.com/InternLM/InternLM.git)，点点star哦~***
+
+![中医药知识问答助手](https://github.com/xiaomile/ChineseMedicalAssistant/assets/14927720/c0acb614-0eb8-4c12-9d32-89925b33d95a)
+
 
 ## *Fun 轶事*
 
@@ -70,6 +76,7 @@
 |:------:|:------:|:-------:|:---------|
 |InternLM-chat-7b|46933 conversations|5 epochs|[xiaomile/ChineseMedicalAssistant_internlm](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm)|
 |InternLM2-chat-7b|46933 conversations|5 epochs|[xiaomile/ChineseMedicalAssistant_internlm2](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2)|
+|InternLM2-chat-1.8b|46933 conversations|3 epochs|[xiaomile/ChineseMedicalAssistant_internlm2_1_8b](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm2_1_8b)|
 |InternLM-chat-7b|469330 conversations|4 epochs|[xiaomile/ChineseMedicalAssistant_internlm_40w_e4](https://openxlab.org.cn/models/detail/xiaomile/ChineseMedicalAssistant_internlm_40w_e4)|
 |InternLM-chat-7b|46933 conversations|3 epochs|[zongkang/ChineseMedicalAssistant](https://openxlab.org.cn/models/detail/zongkang/ChineseMedicalAssistant)|
 |InternLM-chat-7b|469330 conversations|6 epochs|[zongkang/ChineseMedicalAssistant_chat_7b](https://openxlab.org.cn/models/detail/zongkang/ChineseMedicalAssistant_chat_7b)|
